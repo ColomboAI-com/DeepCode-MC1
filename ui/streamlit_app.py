@@ -16,6 +16,12 @@ parent_dir = os.path.dirname(current_dir)
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
+# Apply patch for ColomboAI API compatibility (handles missing usage field)
+try:
+    import patch_openai_llm
+except Exception as e:
+    print(f"⚠️ Could not load OpenAI LLM patch: {e}")
+
 # Import UI modules
 from ui.layout import main_layout
 

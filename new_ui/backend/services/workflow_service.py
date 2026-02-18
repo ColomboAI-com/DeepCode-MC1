@@ -215,6 +215,11 @@ class WorkflowService:
             task.error = str(e)
             task.completed_at = datetime.utcnow()
 
+            # Log detailed error for debugging
+            print(f"[WorkflowService] Paper-to-code error: {e}")
+            import traceback
+            traceback.print_exc()
+
             # Broadcast error signal to all subscribers
             await self._broadcast(
                 task_id,
@@ -350,6 +355,11 @@ class WorkflowService:
             task.status = "error"
             task.error = str(e)
             task.completed_at = datetime.utcnow()
+
+            # Log detailed error for debugging
+            print(f"[WorkflowService] Chat planning error: {e}")
+            import traceback
+            traceback.print_exc()
 
             # Broadcast error signal to all subscribers
             await self._broadcast(

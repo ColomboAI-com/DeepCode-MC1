@@ -75,3 +75,5 @@ deepcode_lab/
 # secrets (use .env or environment variables instead)
 mcp_agent.secrets.yaml
 nanobot_config.json
+mcp_agent.secrets.yaml
+mcp_agent.secrets.yaml

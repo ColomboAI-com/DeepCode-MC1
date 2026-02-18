@@ -110,9 +110,9 @@ llm_provider: "openai"  # 设置为 "google", "anthropic", 或 "openai"
 #openrouter can be used here and openai professional key
 openai:
   base_max_tokens: 40000
-  default_model: "google/gemini-3-flash-preview"
-  planning_model: "google/gemini-3-flash-preview"
-  implementation_model: "google/gemini-3-flash-preview"
+  default_model: "qwen-3"
+  planning_model: "qwen-3"
+  implementation_model: "qwen-3"
   reasoning_effort: low  # Only for thinking models
   max_tokens_policy: adaptive
   retry_max_tokens: 32768

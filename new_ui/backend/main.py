@@ -35,6 +35,12 @@ if str(PROJECT_ROOT) not in sys.path:
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(1, str(BACKEND_DIR))
 
+# Apply patch for ColomboAI API compatibility (handles missing usage field)
+try:
+    import patch_openai_llm
+except Exception as e:
+    print(f"⚠️ Could not load OpenAI LLM patch: {e}")
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware

@@ -135,3 +135,32 @@ async def get_file_info(file_id: str):
         raise HTTPException(status_code=404, detail="File not found")
 
     return file_info
+
+
+@router.get("/download-project/{project_name}")
+async def download_project(project_name: str):
+    """Download generated project as zip"""
+    import zipfile
+    import tempfile
+    from settings import PROJECT_ROOT
+    
+    # Check both deepcode_lab and deepcode_lab/papers
+    project_path = PROJECT_ROOT / "deepcode_lab" / project_name
+    if not project_path.exists():
+        project_path = PROJECT_ROOT / "deepcode_lab" / "papers" / project_name
+    
+    if not project_path.exists():
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    # Create zip in temp directory
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".zip") as tmp:
+        with zipfile.ZipFile(tmp.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for file in project_path.rglob('*'):
+                if file.is_file():
+                    zipf.write(file, file.relative_to(project_path))
+        
+        return FileResponse(
+            path=tmp.name,
+            filename=f"{project_name}.zip",
+            media_type="application/zip",
+        )
