@@ -56,6 +56,15 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Patch mcp_agent to handle API responses where usage=None (e.g. custom OpenAI-compatible endpoints)
+RUN SITE=$(python -c "import site; print(site.getsitepackages()[0])") && \
+    sed -i \
+        's/iteration_input = response\.usage\.prompt_tokens/iteration_input = response.usage.prompt_tokens if response.usage else 0/' \
+        "$SITE/mcp_agent/workflows/llm/augmented_llm_openai.py" && \
+    sed -i \
+        's/iteration_output = response\.usage\.completion_tokens/iteration_output = response.usage.completion_tokens if response.usage else 0/' \
+        "$SITE/mcp_agent/workflows/llm/augmented_llm_openai.py"
+
 # Pre-install npx MCP server packages (avoid download at runtime)
 RUN npx -y @modelcontextprotocol/server-brave-search --help 2>/dev/null || true && \
     npx -y @modelcontextprotocol/server-filesystem --help 2>/dev/null || true
